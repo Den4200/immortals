@@ -9,8 +9,11 @@ def threaded(func: Callable) -> Callable:
     """
 
     def wrapper(*args, **kwargs):
-        thread = Thread(target=func, args=args, kwargs=kwargs)
-        thread.daemon = True
-        thread.start()
-
+        Thread(
+            target=func, 
+            args=args,
+            kwargs=kwargs,
+            daemon=True
+        ).start()
+        
     return wrapper

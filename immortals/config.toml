@@ -1,0 +1,9 @@
+title = "Immortals Server"
+
+[resolution]
+width = 480
+height = 360
+
+[server]
+ip = "127.0.0.1"
+port = 5555

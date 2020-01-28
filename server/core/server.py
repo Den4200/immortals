@@ -52,13 +52,8 @@ class Server:
                 )
             )
 
-        packets = pickle.dumps(self.players[raddr])
-        value = socket.htonl(len(packets))
-        size = struct.pack('L', value)
-        print(size, packets)
-        conn.send(size)
-        conn.send(packets)
-
+        self.send(conn, self.players[raddr])
+        
         while True:
             try:
                 data = self.recieve(conn)
