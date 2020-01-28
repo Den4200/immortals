@@ -1,21 +1,23 @@
+import struct
 import pickle
 import socket
 from random import randrange
 
-from player import Player
-from utils import threaded
+from .player import Player
+from .utils import threaded
 
 
 class Server:
 
     def __init__(
-            self, 
-            ip: str = '127.0.0.1', 
-            port: int = 5555
-        ) -> None:
+        self, 
+        ip: str = '127.0.0.1', 
+        port: int = 5555
+    ) -> None:
 
         self.socket = socket.socket(
-            socket.AF_INET, socket.SOCK_STREAM
+            socket.AF_INET, 
+            socket.SOCK_STREAM
         )
         self.ip = ip
         self.port = port
@@ -50,11 +52,16 @@ class Server:
                 )
             )
 
-        conn.send(pickle.dumps(self.players[raddr]))
+        packets = pickle.dumps(self.players[raddr])
+        value = socket.htonl(len(packets))
+        size = struct.pack('L', value)
+        print(size, packets)
+        conn.send(size)
+        conn.send(packets)
 
         while True:
             try:
-                data = pickle.loads(conn.recv(2048))
+                data = self.recieve(conn)
                 self.players[raddr] = data
 
                 if not data:
@@ -63,9 +70,10 @@ class Server:
 
                 else:
                     players = list(self.players.items())
-                    conn.sendall(pickle.dumps(
+                    self.send(
+                        conn,
                         [player for addr, player in players if addr != raddr]
-                    ))
+                    )
 
             except:
                 break
@@ -74,6 +82,25 @@ class Server:
 
         print(f'Player {raddr} disconnected')
         conn.close()
+
+    def send(self, conn, data):
+        packets = pickle.dumps(data)
+        value = socket.htonl(len(packets))
+        size = struct.pack('L', value)
+        conn.send(size)
+        conn.send(packets)
+
+    def recieve(self, conn):
+        size = struct.calcsize('L')
+        size = conn.recv(size)
+        size = socket.ntohl(struct.unpack('L', size)[0])
+
+        result = b''
+
+        while len(result) < size:
+            result += conn.recv(size - len(result))
+
+        return pickle.loads(result)
 
     def run(self) -> None:
         try:

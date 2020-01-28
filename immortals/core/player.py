@@ -1,8 +1,16 @@
+from typing import Tuple
+
 import pygame
 
 
 class Player():
-    def __init__(self, x, y, width, height, color):
+    def __init__(
+        self, 
+        x: int, y: int, 
+        width: int, height: int, 
+        color: Tuple[int, int, int]
+    ) -> None:
+    
         self.x = x
         self.y = y
         self.width = width
