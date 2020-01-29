@@ -3,7 +3,7 @@ import pickle
 import socket
 from random import randrange
 
-from .player import Player
+from .playerdata import PlayerData
 from .utils import threaded
 
 
@@ -34,7 +34,7 @@ class Server:
 
         if len(self.players) == 0:
             self.players[raddr] = (
-                Player(
+                PlayerData(
                     0, 50,
                     50, 50,
                     color
@@ -44,7 +44,7 @@ class Server:
             prev = list(self.players.values())
 
             self.players[raddr] = (
-                Player(
+                PlayerData(
                     prev[-1].x + 100,
                     prev[-1].y,
                     50, 50,

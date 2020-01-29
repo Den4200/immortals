@@ -2,42 +2,81 @@ from typing import Tuple
 
 import pygame
 
+from .playerdata import PlayerData
 
-class Player():
+
+class Player(pygame.sprite.Sprite):
+
     def __init__(
         self, 
         x: int, y: int, 
         width: int, height: int, 
-        color: Tuple[int, int, int]
+        color: Tuple[int, int, int],
+        screen_height: int,
+        screen_width: int,
+        map_arena
     ) -> None:
+
+        super(Player, self).__init__()
+
+        self.image = pygame.Surface((width, height))
+        self.image.fill(color)
+
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+        self.screen_height = screen_height
+        self.screen_width = screen_width
+
+        self.x_delta = 0
+        self.y_delta = 0
+
+        self.map_arena = map_arena
+
+    def update(self) -> None:
+        self.calculate_gravity()
+
+        self.rect.x += self.x_delta
+
+        collided = pygame.sprite.collide_rect(self, self.map_arena)
+
+        if collided:
+
+            if self.y_delta > 0:
+                self.rect.bottom = self.map_arena.rect.top
+
+            elif self.y_delta < 0:
+                self.rect.top = self.map_arena.rect.bottom
+
+            self.y_delta = 0
+
+    def calculate_gravity(self) -> None:
+        if self.y_delta == 0:
+            self.y_delta = 1
+        else:
+            self.y_delta += 0.35
+
+        if (
+            self.rect.y >= (self.screen_height - self.rect.height)
+            and self.y_delta >= 0
+        ):
+            self.y_delta = 0
+            self.rect.y = self.screen_height - self.rect.height
     
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.color = color
-        self.rect = (x,y,width,height)
-        self.vel = 3
+    def jump(self) -> None:
+        self.rect.y += 2
+        collided = pygame.sprite.collide_rect(self, self.map_arena)
+        self.rect.y -= 2
 
-    def draw(self, win):
-        pygame.draw.rect(win, self.color, self.rect)
+        if self.rect.bottom >= self.screen_height or collided:
+            self.y_delta = -10
 
-    def move(self):
-        keys = pygame.key.get_pressed()
+    def move_left(self) -> None:
+        self.x_delta = -6
 
-        if keys[pygame.K_LEFT]:
-            self.x -= self.vel
+    def move_right(self) -> None:
+        self.x_delta = 6
 
-        if keys[pygame.K_RIGHT]:
-            self.x += self.vel
-
-        if keys[pygame.K_UP]:
-            self.y -= self.vel
-
-        if keys[pygame.K_DOWN]:
-            self.y += self.vel
-
-        self.update()
-
-    def update(self):
-        self.rect = (self.x, self.y, self.width, self.height)
+    def stop(self) -> None:
+        self.x_delta = 0

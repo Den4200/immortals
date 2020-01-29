@@ -1,4 +1,5 @@
 import toml
+import pygame
 
 from core.client import Client
 from core.exceptions import MissingConfiguration
@@ -17,4 +18,5 @@ if __name__ == "__main__":
         ) from None
 
     else:
+        pygame.init()
         Client(**configs).run()
