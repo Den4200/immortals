@@ -1,8 +1,8 @@
 title = "Immortals Server"
 
 [resolution]
-width = 1280
-height = 720
+width = 1929
+height = 1080
 
 [server]
 ip = "127.0.0.1"

@@ -1,4 +1,4 @@
-from typing import List
+from typing import Tuple
 
 import pygame
 
@@ -27,16 +27,38 @@ class Client:
 
         pygame.display.set_caption('Immortals')
 
+        self.player_count = 0
         self.network = Network(ip, port)
         self.userdata = self.network.connect()
-        self.active_sprites = pygame.sprite.Group()
+        self.active_sprites = list()
 
-    def refresh(self, map_arena, *playerdata: List['Player']) -> None:
-        # self.user = Player(*user.data, self.height, self.width, map_arena)
-        # self.active_sprites.add(self.user)
+    def update_active_sprites(self):
+        for sprite in self.active_sprites:
+            sprite.update()
 
-        # for pd in playerdata:
-        #     self.active_sprites.add(Player(*pd.data, self.height, self.width, map_arena))
+    def draw_active_sprites(self):
+        for sprite in self.active_sprites:
+            self.win.blit(sprite.image, sprite.rect)
+
+    def refresh(self, map_arena, *playerdata: Tuple['Player']) -> None:
+
+        if len(playerdata) > self.player_count:
+            self.player_count += 1
+            self.active_sprites.append(
+                Player(
+                    *playerdata[-1].data,
+                    self.height, self.width,
+                    map_arena
+                )
+            )
+
+        for i, _ in enumerate(self.active_sprites[1:]):
+            try:
+                self.active_sprites[i].data[:] = playerdata[i - 1].data
+
+            except IndexError:
+                self.active_sprites.pop(i - 1)
+                self.player_count -= 1
 
         if self.user.rect.right > self.width:
             self.user.rect.right = self.width
@@ -44,23 +66,21 @@ class Client:
         if self.user.rect.left < 0:
              self.user.rect.left = 0
 
-        self.active_sprites.update()
+        self.update_active_sprites()
         map_arena.update()
         pygame.display.flip()
 
     def run(self) -> None:
-        # self.user.init(self.win.get_height() // 2 - arena.rect.size[1])
         map_ = Haven(self.win)
-        map_.draw()
         self.user = Player(*self.userdata.data, self.height, self.width, map_)
-        self.active_sprites.add(self.user)
+        self.active_sprites.append(self.user)
 
         while self.is_running:
             self.clock.tick(60)
 
-            playerdata = self.network.send(self.userdata)
-            self.refresh(map_, self.userdata, *playerdata)
             self.userdata.data = self.user.data
+            playerdata = self.network.send(self.userdata)
+            self.refresh(map_, *playerdata)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -85,5 +105,8 @@ class Client:
 
                     if event.key == pygame.K_d and self.user.x_delta > 0:
                         self.user.stop()
+
+            map_.draw()
+            self.draw_active_sprites()
 
 # http://programarcadegames.com/python_examples/show_file.php?file=platform_jumper.py

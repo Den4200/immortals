@@ -25,6 +25,10 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        
+        self.height = height
+        self.width = width
+        self.color = color
 
         self.screen_height = screen_height
         self.screen_width = screen_width
@@ -34,11 +38,11 @@ class Player(pygame.sprite.Sprite):
 
         self.map_arena = map_arena
 
-        self.data = (
+        self.data = [
             self.rect.x, self.rect.y,
             width, height,
             color
-        )
+        ]
 
     def update(self) -> None:
         self.calculate_gravity()
@@ -65,11 +69,17 @@ class Player(pygame.sprite.Sprite):
             elif self.y_delta < 0:
                 self.rect.top = c.rect.bottom
 
+        self.data = [
+            self.rect.x, self.rect.y,
+            self.width, self.height,
+            self.color
+        ]
+
     def calculate_gravity(self) -> None:
         if self.y_delta == 0:
             self.y_delta = 1
         else:
-            self.y_delta += 0.35
+            self.y_delta += 0.25
 
         if (
             self.rect.y >= (self.screen_height - self.rect.height)
@@ -79,12 +89,12 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = self.screen_height - self.rect.height
     
     def jump(self) -> None:
-        self.rect.y += 2
+        self.rect.y += 1
         collided = pygame.sprite.spritecollide(self, self.map_arena.platform_list, False)
-        self.rect.y -= 2
+        self.rect.y -= 1
 
         if len(collided) > 0 or self.rect.bottom >= self.screen_height:
-            self.y_delta = -10
+            self.y_delta = -7.5
 
     def move_left(self) -> None:
         self.x_delta = -6

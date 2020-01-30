@@ -35,7 +35,7 @@ class Server:
         if len(self.players) == 0:
             self.players[raddr] = (
                 PlayerData(
-                    0, 50,
+                    1000, 50,
                     50, 50,
                     color
                 )
@@ -45,8 +45,8 @@ class Server:
 
             self.players[raddr] = (
                 PlayerData(
-                    prev[-1].x + 100,
-                    prev[-1].y,
+                    prev[-1].data[0] + 100,
+                    prev[-1].data[1],
                     50, 50,
                     color
                 )
@@ -69,8 +69,10 @@ class Server:
                         conn,
                         [player for addr, player in players if addr != raddr]
                     )
+                    print(*(x[1].data for x in players))
 
-            except:
+            except Exception as e:
+                print(e)
                 break
         
         self.players.pop(raddr)
