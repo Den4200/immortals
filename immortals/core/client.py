@@ -52,12 +52,12 @@ class Client:
                 )
             )
 
-        for i, _ in enumerate(self.active_sprites[1:]):
+        for i, _ in enumerate(self.active_sprites[1:], 1):
             try:
-                self.active_sprites[i].data[:] = playerdata[i - 1].data
+                self.active_sprites[i].set_data(playerdata[i - 1].data)
 
             except IndexError:
-                self.active_sprites.pop(i - 1)
+                self.active_sprites.pop(i)
                 self.player_count -= 1
 
         if self.user.rect.right > self.width:

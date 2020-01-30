@@ -38,11 +38,14 @@ class Player(pygame.sprite.Sprite):
 
         self.map_arena = map_arena
 
-        self.data = [
+        self.data = (
             self.rect.x, self.rect.y,
-            width, height,
-            color
-        ]
+            self.width, self.height,
+            self.color
+        )
+
+    def set_data(self, data):
+        self.rect.x, self.rect.y, *_ = data
 
     def update(self) -> None:
         self.calculate_gravity()
@@ -69,11 +72,11 @@ class Player(pygame.sprite.Sprite):
             elif self.y_delta < 0:
                 self.rect.top = c.rect.bottom
 
-        self.data = [
+        self.data = (
             self.rect.x, self.rect.y,
             self.width, self.height,
             self.color
-        ]
+        )
 
     def calculate_gravity(self) -> None:
         if self.y_delta == 0:

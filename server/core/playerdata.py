@@ -12,8 +12,8 @@ class PlayerData:
         color: Tuple[int, int, int]
     ) -> None:
 
-        self.data = [
+        self.data = (
             x, y,
             width, height,
             color
-        ]
+        )

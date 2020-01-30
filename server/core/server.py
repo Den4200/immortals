@@ -35,7 +35,7 @@ class Server:
         if len(self.players) == 0:
             self.players[raddr] = (
                 PlayerData(
-                    1000, 50,
+                    600, 50,
                     50, 50,
                     color
                 )
