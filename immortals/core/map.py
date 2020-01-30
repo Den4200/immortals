@@ -7,17 +7,18 @@ from .constants import MAPS
 
 class Map:
 
-    def __init__(self) -> None:
+    def __init__(self, win) -> None:
         self.platform_list = pygame.sprite.Group()
+        self.win = win
         self.background = None
 
     def update(self) -> None:
         self.platform_list.update()
         
-    def draw(self, win) -> None:
-        win.fill((255, 255, 255))
+    def draw(self) -> None:
+        self.win.fill((255, 255, 255))
 
-        self.platform_list.draw(win)
+        self.platform_list.draw(self.win)
 
 
 class Platform(pygame.sprite.Sprite):
@@ -30,3 +31,12 @@ class Platform(pygame.sprite.Sprite):
         
         self.rect.left = (width // 2) - (self.rect.size[0] // 2)
         self.rect.top = (height // 2) - (self.rect.size[1] // 2)
+
+
+class Haven(Map):
+
+    def __init__(self, win) -> None:
+        super(Haven, self).__init__(win)
+
+        arena = Platform(self.win.get_height(), self.win.get_width())
+        self.platform_list.add(arena)

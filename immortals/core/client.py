@@ -5,7 +5,7 @@ import pygame
 from .network import Network
 from .playerdata import PlayerData
 from .player import Player
-from .map import Platform, Map
+from .map import Haven
 
 
 class Client:
@@ -28,29 +28,39 @@ class Client:
         pygame.display.set_caption('Immortals')
 
         self.network = Network(ip, port)
-        self.user = self.network.connect()
+        self.userdata = self.network.connect()
+        self.active_sprites = pygame.sprite.Group()
 
     def refresh(self, map_arena, *playerdata: List['Player']) -> None:
-        self.win.fill((255,255,255))
+        # self.user = Player(*user.data, self.height, self.width, map_arena)
+        # self.active_sprites.add(self.user)
 
-        for pd in playerdata:
-            Player(*pd.data, self.height, self.width, map_arena)
+        # for pd in playerdata:
+        #     self.active_sprites.add(Player(*pd.data, self.height, self.width, map_arena))
 
-        self.win.blit(map_arena.image, map_arena.rect)
+        if self.user.rect.right > self.width:
+            self.user.rect.right = self.width
+
+        if self.user.rect.left < 0:
+             self.user.rect.left = 0
+
+        self.active_sprites.update()
+        map_arena.update()
         pygame.display.flip()
 
     def run(self) -> None:
-        arena = Platform(self.win.get_height(), self.win.get_width())
-        self.user.init(self.win.get_height() // 2 - arena.rect.size[1])
+        # self.user.init(self.win.get_height() // 2 - arena.rect.size[1])
+        map_ = Haven(self.win)
+        map_.draw()
+        self.user = Player(*self.userdata.data, self.height, self.width, map_)
+        self.active_sprites.add(self.user)
 
         while self.is_running:
             self.clock.tick(60)
 
-            playerdata = self.network.send(self.user)
-            
-            self.user.move()
-
-            self.refresh(arena, self.user, *playerdata)
+            playerdata = self.network.send(self.userdata)
+            self.refresh(map_, self.userdata, *playerdata)
+            self.userdata.data = self.user.data
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
