@@ -1,7 +1,7 @@
 import toml
 import pygame
 
-from core.client import Client
+from core.client import ImmortalsClient
 from core.exceptions import MissingConfiguration
 
 if __name__ == "__main__":
@@ -19,4 +19,4 @@ if __name__ == "__main__":
 
     else:
         pygame.init()
-        Client(**configs).run()
+        ImmortalsClient(**configs).run()

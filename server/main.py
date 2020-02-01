@@ -1,6 +1,6 @@
 import toml
 
-from core.server import Server
+from core.server import ImmortalsServer
 from core.exceptions import MissingConfiguration
 
 if __name__ == "__main__":
@@ -16,4 +16,4 @@ if __name__ == "__main__":
         ) from None
 
     else:
-        Server(**config).run()
+        ImmortalsServer(**config).run()

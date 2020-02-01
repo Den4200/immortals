@@ -1,14 +1,14 @@
 from typing import Tuple
 
 import pygame
+from connectIO import Client
 
-from .network import Network
 from .playerdata import PlayerData
 from .player import Player
 from .map import Haven
 
 
-class Client:
+class ImmortalsClient:
 
     def __init__(
         self, 
@@ -18,6 +18,8 @@ class Client:
         port: int = 5555
     ) -> None:
     
+        print(width, height, ip, port)
+
         self.clock = pygame.time.Clock()
         self.win = pygame.display.set_mode((width, height))
         self.is_running = True
@@ -28,8 +30,11 @@ class Client:
         pygame.display.set_caption('Immortals')
 
         self.player_count = 0
-        self.network = Network(ip, port)
-        self.userdata = self.network.connect()
+
+        self.network = Client(ip, port)
+        self.network.connect()
+        self.userdata = self.network.recieve()
+
         self.active_sprites = list()
 
     def update_active_sprites(self):
@@ -79,7 +84,10 @@ class Client:
             self.clock.tick(60)
 
             self.userdata.data = self.user.data
-            playerdata = self.network.send(self.userdata)
+
+            self.network.send(self.userdata)
+            playerdata = self.network.recieve()
+            
             self.refresh(map_, *playerdata)
 
             for event in pygame.event.get():
