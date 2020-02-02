@@ -11,13 +11,13 @@ from .map import Haven
 class ImmortalsClient:
 
     def __init__(
-        self, 
+        self,
         width: int = 1920,
         height: int = 1080,
-        ip: str = '127.0.0.1', 
+        ip: str = '127.0.0.1',
         port: int = 5555
     ) -> None:
-    
+
         print(width, height, ip, port)
 
         self.clock = pygame.time.Clock()
@@ -49,9 +49,10 @@ class ImmortalsClient:
 
         if len(playerdata) > self.player_count:
             self.player_count += 1
+            print([playerdata[i].data for i in range(len(playerdata))])
             self.active_sprites.append(
                 Player(
-                    playerdata[-1].data,
+                    *playerdata[-1].data,
                     self.height, self.width,
                     map_arena
                 )
@@ -69,7 +70,7 @@ class ImmortalsClient:
             self.user.rect.right = self.width
 
         if self.user.rect.left < 0:
-             self.user.rect.left = 0
+            self.user.rect.left = 0
 
         self.update_active_sprites()
         map_arena.update()
@@ -87,7 +88,7 @@ class ImmortalsClient:
 
             self.network.send(self.userdata)
             playerdata = self.network.recieve()
-            
+
             self.refresh(map_, playerdata)
 
             for event in pygame.event.get():
