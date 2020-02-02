@@ -45,13 +45,13 @@ class ImmortalsClient:
         for sprite in self.active_sprites:
             self.win.blit(sprite.image, sprite.rect)
 
-    def refresh(self, map_arena, *playerdata: Tuple['Player']) -> None:
+    def refresh(self, map_arena, playerdata: Tuple['Player']) -> None:
 
         if len(playerdata) > self.player_count:
             self.player_count += 1
             self.active_sprites.append(
                 Player(
-                    *playerdata[-1].data,
+                    playerdata[-1].data,
                     self.height, self.width,
                     map_arena
                 )
@@ -88,7 +88,7 @@ class ImmortalsClient:
             self.network.send(self.userdata)
             playerdata = self.network.recieve()
             
-            self.refresh(map_, *playerdata)
+            self.refresh(map_, playerdata)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
