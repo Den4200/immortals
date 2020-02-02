@@ -1,30 +1,19 @@
-import struct
-import pickle
-import socket
 from random import randrange
+from connectIO import Server, threaded
 
 from .playerdata import PlayerData
-from .utils import threaded
 
 
-class Server:
+class ImmortalsServer(Server):
 
-    def __init__(
-        self, 
-        ip: str = '127.0.0.1', 
-        port: int = 5555
-    ) -> None:
+    def __init__(self, ip: str = '127.0.0.1', port: int = 5555):
+        super(ImmortalsServer, self).__init__()
+        self.func = self.player
 
-        self.socket = socket.socket(
-            socket.AF_INET, 
-            socket.SOCK_STREAM
-        )
-        self.ip = ip
-        self.port = port
         self.players = dict()
 
     @threaded
-    def player(self, conn: 'socket.socket') -> None:
+    def player(self, conn, addr) -> None:
         raddr = conn.getpeername()
         color = (
             randrange(0, 256, 64),
@@ -69,50 +58,12 @@ class Server:
                         conn,
                         [player for addr, player in players if addr != raddr]
                     )
-                    print(*(x[1].data for x in players))
+                    # print(*(x[1].data for x in players))
 
-            except Exception as e:
-                print(e)
+            except Exception:
                 break
         
         self.players.pop(raddr)
 
         print(f'Player {raddr} disconnected')
         conn.close()
-
-    def send(self, conn, data):
-        packets = pickle.dumps(data)
-        value = socket.htonl(len(packets))
-        size = struct.pack('L', value)
-        conn.send(size)
-        conn.send(packets)
-
-    def recieve(self, conn):
-        size = struct.calcsize('L')
-        size = conn.recv(size)
-        size = socket.ntohl(struct.unpack('L', size)[0])
-
-        result = b''
-
-        while len(result) < size:
-            result += conn.recv(size - len(result))
-
-        return pickle.loads(result)
-
-    def run(self) -> None:
-        try:
-            self.socket.bind((self.ip, self.port))
-
-        except socket.error as e:
-            print(e)
-
-        else:
-            print('Server sucessfully initialized')
-            self.socket.listen()
-            print('Server awaiting new connections')
-
-            while True:
-                conn, addr = self.socket.accept()
-                print(f'Connection established to {addr}')
-
-                self.player(conn)
