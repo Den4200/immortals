@@ -34,14 +34,14 @@ class ImmortalsServer(Server):
 
             self.players[raddr] = (
                 PlayerData(
-                    prev.data[0] + 100,
-                    prev.data[1],
+                    prev[1].data[0] + 100,
+                    prev[1].data[1],
                     50, 50,
                     color
                 )
             )
 
-        self.send(conn, self.players[raddr])
+        self.send(conn, (raddr, self.players[raddr]))
         
         while True:
             try:
@@ -56,7 +56,7 @@ class ImmortalsServer(Server):
                     players = list(self.players.items())
                     self.send(
                         conn,
-                        [player for addr, player in players if addr != raddr]
+                        {addr: player for addr, player in players if addr != raddr}
                     )
                     # print(*(x[1].data for x in players))
 

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Dict, Tuple
 
 import pygame
 from connectIO import Client
@@ -35,34 +35,38 @@ class ImmortalsClient:
         self.network.connect()
         self.userdata = self.network.recieve()
 
-        self.active_sprites = list()
+        self.active_sprites = dict()
 
     def update_active_sprites(self):
-        for sprite in self.active_sprites:
+        for sprite in self.active_sprites.values():
             sprite.update()
 
     def draw_active_sprites(self):
-        for sprite in self.active_sprites:
+        for sprite in self.active_sprites.values():
             self.win.blit(sprite.image, sprite.rect)
 
-    def refresh(self, map_arena, playerdata: Tuple['Player']) -> None:
+    def refresh(self, map_arena, playerdata: Dict[Tuple[str, int], 'PlayerData']) -> None:
 
         if len(playerdata) > self.player_count:
-            self.player_count += 1
-            self.active_sprites.append(
-                Player(
-                    *playerdata[-1].data,
-                    self.height, self.width,
-                    map_arena
-                )
-            )
 
-        for i, _ in enumerate(self.active_sprites[1:], 1):
+            for addr in playerdata:
+                if addr not in self.active_sprites:
+                    self.active_sprites.update({
+                        addr: Player(
+                            *playerdata[addr][1].data,
+                            self.height, self.width,
+                            map_arena
+                        )
+                    })
+                    self.player_count += 1
+
+        active_lst = list(self.active_sprites)[1:]
+        for addr in active_lst:
             try:
-                self.active_sprites[i].set_data(playerdata[i - 1].data)
+                self.active_sprites[addr].set_data(playerdata[addr][1].data)
 
-            except IndexError:
-                self.active_sprites.pop(i)
+            except KeyError:
+                self.active_sprites.pop(addr)
                 self.player_count -= 1
 
         if self.user.rect.right > self.width:
@@ -77,13 +81,15 @@ class ImmortalsClient:
 
     def run(self) -> None:
         map_ = Haven(self.win)
-        self.user = Player(*self.userdata.data, self.height, self.width, map_)
-        self.active_sprites.append(self.user)
+        self.user = Player(*self.userdata[1].data, self.height, self.width, map_)
+        self.active_sprites.update({
+            self.userdata[0]: self.user
+        })
 
         while self.is_running:
             self.clock.tick(60)
 
-            self.userdata.data = self.user.data
+            self.userdata[1].data = self.user.data
 
             self.network.send(self.userdata)
             playerdata = self.network.recieve()
