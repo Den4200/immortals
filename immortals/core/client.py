@@ -49,7 +49,6 @@ class ImmortalsClient:
 
         if len(playerdata) > self.player_count:
             self.player_count += 1
-            print([playerdata[i].data for i in range(len(playerdata))])
             self.active_sprites.append(
                 Player(
                     *playerdata[-1].data,
