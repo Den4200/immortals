@@ -30,12 +30,12 @@ class ImmortalsServer(Server):
                 )
             )
         else:
-            prev = list(self.players.values())
+            prev = list(self.players.values())[-1]
 
             self.players[raddr] = (
                 PlayerData(
-                    prev[-1].data[0] + 100,
-                    prev[-1].data[1],
+                    prev.data[0] + 100,
+                    prev.data[1],
                     50, 50,
                     color
                 )
