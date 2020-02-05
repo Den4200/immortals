@@ -49,9 +49,9 @@ class Room:
         players = self._players
         if not ip:
             keys = players.keys()
-            ip = keys[players.values().index(player)]  # getting the ip by the player
+            ip = keys[list(players.values()).index(player)]  # getting the ip by the player
         if not all(ip, player) or ip not in self._players:
-            raise PlayerDoesNotExist(f"The Player  Isn't in room {self._id}") from None
+            raise PlayerDoesNotExist(f"The Player TODO Isn't in room {self._id}") from None
         self._players.pop(ip)
         self.colors.append(player.color)
 
