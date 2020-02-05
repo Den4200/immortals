@@ -21,6 +21,9 @@ class Room:
     def player_count(self):
         return len(self._players)
 
+    def can_party_join(self, length: int):
+        return (len(self._players) + length) <= ROOM_PLAYER_LIMIT
+
     def add_player(self, client, player):
         """
         :param client: The client which controls the player
