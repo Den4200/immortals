@@ -65,7 +65,7 @@ class ImmortalsServer(Server):
                     )
                     # print(*(x[1].data for x in players))
 
-            except Exception:
+            except Exception:  # TODO handle it better
                 break
 
         self.players.pop(raddr)
@@ -77,11 +77,11 @@ class ImmortalsServer(Server):
         if party is None:
             # we can handle this better
             return
-        room_id = 12345  # Todo - Generate room id
+        room_id = 12345  # TODO - Generate room id
         room = Room(self, room_id)
 
         if not room.can_party_join(len(party)):
-            # Todo Need to send the client a message
+            # TODO Need to send the client a message
             return
 
         for ip, player in party:
@@ -92,10 +92,10 @@ class ImmortalsServer(Server):
     def join_room(self, room_id: int, party: Dict[str, PlayerData] = None):
         room = self.rooms.get(room_id)
         if room is None:
-            # Todo Need to send the client a message
+            # TODO Need to send the client a message
             return
         if not room.can_party_join(len(party)):
-            # Todo Need to send the client a message
+            # TODO Need to send the client a message
             return
 
         for ip, player in party:
