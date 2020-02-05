@@ -1,4 +1,4 @@
-from random import randrange
+from random import randrange, randint
 from connectIO import Server, threaded
 
 from typing import Dict
@@ -77,7 +77,7 @@ class ImmortalsServer(Server):
         if party is None:
             # we can handle this better
             return
-        room_id = 12345  # TODO - Generate room id
+        room_id = self.generate_room_id()
         room = Room(self, room_id)
 
         if not room.can_party_join(len(party)):
@@ -100,3 +100,9 @@ class ImmortalsServer(Server):
 
         for ip, player in party:
             room.add_player(ip, player)
+
+    def generate_room_id(self):
+        rand = self.rooms[0]
+        while rand in self.rooms:
+            rand = ''.join(str(randint(0, 9)) for _ in range(6))
+        return rand
