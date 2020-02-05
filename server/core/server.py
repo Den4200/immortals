@@ -1,7 +1,11 @@
 from random import randrange
 from connectIO import Server, threaded
 
+from typing import Dict
+
 from .playerdata import PlayerData
+from .room import Room
+from .exceptions import RoomIsFull
 
 
 class ImmortalsServer(Server):
@@ -11,6 +15,7 @@ class ImmortalsServer(Server):
         self.func = self.player
 
         self.players = dict()
+        self.rooms = dict()
 
     @threaded
     def player(self, conn, addr) -> None:
@@ -42,7 +47,7 @@ class ImmortalsServer(Server):
             )
 
         self.send(conn, (raddr, self.players[raddr]))
-        
+
         while True:
             try:
                 data = self.recieve(conn)
@@ -62,8 +67,36 @@ class ImmortalsServer(Server):
 
             except Exception:
                 break
-        
+
         self.players.pop(raddr)
 
         print(f'Player {raddr} disconnected')
         conn.close()
+
+    def create_room(self, party: Dict[str, PlayerData] = None):
+        if party is None:
+            # we can handle this better
+            return
+        room_id = 12345  # Todo - Generate room id
+        room = Room(self, room_id)
+
+        if not room.can_party_join(len(party)):
+            # Todo Need to send the client a message
+            return
+
+        for ip, player in party:
+            room.add_player(ip, player)
+
+        self.rooms[room_id] = Room
+
+    def join_room(self, room_id: int, party: Dict[str, PlayerData] = None):
+        room = self.rooms.get(room_id)
+        if room is None:
+            # Todo Need to send the client a message
+            return
+        if not room.can_party_join(len(party)):
+            # Todo Need to send the client a message
+            return
+
+        for ip, player in party:
+            room.add_player(ip, player)
