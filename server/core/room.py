@@ -7,7 +7,6 @@ class Room:
         self._id = room_id
         self.__server = server
         self.is_private = private
-        self.full: bool = False
         self._players = dict()
         self.colors = list(COLORS.values())
 
@@ -29,7 +28,7 @@ class Room:
         return len(self._players)
 
     def can_party_join(self, length: int):
-        return self.full or (len(self._players) + length) <= ROOM_PLAYER_LIMIT
+        return (len(self._players) + length) <= ROOM_PLAYER_LIMIT
 
     def add_player(self, ip, playerdata):
         """
