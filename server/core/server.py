@@ -34,8 +34,8 @@ class ImmortalsServer(Server):
 
             self.players[raddr] = (
                 PlayerData(
-                    prev[1].data[0] + 100,
-                    prev[1].data[1],
+                    prev.data[0] + 100,
+                    prev.data[1],
                     50, 50,
                     color
                 )
@@ -46,7 +46,7 @@ class ImmortalsServer(Server):
         while True:
             try:
                 data = self.recieve(conn)
-                self.players[raddr] = data
+                self.players[raddr] = data[1]
 
                 if not data:
                     print(f'Disconnected from player {raddr}')

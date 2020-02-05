@@ -53,7 +53,7 @@ class ImmortalsClient:
                 if addr not in self.active_sprites:
                     self.active_sprites.update({
                         addr: Player(
-                            *playerdata[addr][1].data,
+                            *playerdata[addr].data,
                             self.height, self.width,
                             map_arena
                         )
@@ -63,7 +63,7 @@ class ImmortalsClient:
         active_lst = list(self.active_sprites)[1:]
         for addr in active_lst:
             try:
-                self.active_sprites[addr].set_data(playerdata[addr][1].data)
+                self.active_sprites[addr].set_data(playerdata[addr].data)
 
             except KeyError:
                 self.active_sprites.pop(addr)
