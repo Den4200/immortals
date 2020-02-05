@@ -5,7 +5,7 @@ from .exceptions import RoomIsFull
 class Room:
     def __init__(self, server, room_id):
         self._id = room_id
-        self._server = server
+        self.__server = server
         self._players = dict()
         self.colors = COLORS
 
