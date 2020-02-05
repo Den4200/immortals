@@ -1,5 +1,5 @@
-from .exceptions import RoomIsFull
 from immortals.core.settings import ROOM_PLAYER_LIMIT
+from .exceptions import RoomIsFull
 
 
 class Room:
@@ -7,6 +7,18 @@ class Room:
         self._id = room_id
         self._server = server
         self._players = dict()
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def players(self):
+        return self._players
+
+    @property
+    def player_count(self):
+        return len(self._players)
 
     def add_player(self, client, player):
         """
@@ -21,14 +33,4 @@ class Room:
             ) from None
         self._players[client.ip] = player
 
-    @property
-    def id(self):
-        return self._id
 
-    @property
-    def players(self):
-        return self._players
-
-    @property
-    def player_count(self):
-        return len(self._players)
