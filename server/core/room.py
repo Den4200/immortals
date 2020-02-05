@@ -1,4 +1,4 @@
-from immortals.core.settings import ROOM_PLAYER_LIMIT, COLORS
+from .constants import ROOM_PLAYER_LIMIT, COLORS
 from .exceptions import RoomIsFull
 
 
@@ -7,7 +7,7 @@ class Room:
         self._id = room_id
         self.__server = server
         self._players = dict()
-        self.colors = COLORS
+        self.colors = list(COLORS.values())
 
     @property
     def id(self):
@@ -37,5 +37,3 @@ class Room:
             ) from None
         self._players[client.ip] = player
         player.color = self.colors.pop()
-
-
