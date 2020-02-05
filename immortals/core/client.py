@@ -37,6 +37,7 @@ class ImmortalsClient:
         self._playerdata = self.network.recieve()
         self._player: Player = None
         self.active_sprites = dict()
+        # self.ask = True
 
     @property
     def player(self):
@@ -89,6 +90,17 @@ class ImmortalsClient:
         pygame.display.flip()
 
     def run(self) -> None:
+        # if not self.ask:
+        #     # This is an example, bad implementation for testing
+        #     self.ask = False
+        #     inp = input("Create or join a room")
+        #     if inp.lower() == "create":
+        #         self.network.send(self, b'create')
+        #     if inp.lower() == "join":
+        #         room_id = int(input("Enter room id"))
+        #         self.network.send(self, b'join')
+        #         self.network.send(bytes(room_id))
+
         map_ = Haven(self.win)
         self._player = Player(*self._playerdata[1].data, self.height, self.width, map_)
         self.active_sprites.update({
