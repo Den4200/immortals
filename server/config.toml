@@ -3,3 +3,12 @@ title = "Immortals Server"
 [server]
 ip = "127.0.0.1"
 port = 5555
+
+[game_room]
+player_limit = 4
+
+[player_colors]
+green = [51, 255, 51]
+red = [230, 60, 48]
+blue = [39, 131, 230]
+yellow = [237, 224, 43]

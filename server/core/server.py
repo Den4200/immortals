@@ -81,7 +81,7 @@ class ImmortalsServer(Server):
         room = Room(self, room_id)
 
         if not room.can_party_join(len(party)):
-            # Todo Need to send the client a message
+            # TODO Need to send the client a message
             return
 
         for ip, player in party:
@@ -92,10 +92,10 @@ class ImmortalsServer(Server):
     def join_room(self, room_id: int, party: Dict[str, PlayerData] = None):
         room = self.rooms.get(room_id)
         if room is None:
-            # Todo Need to send the client a message
+            # TODO Need to send the client a message
             return
         if not room.can_party_join(len(party)):
-            # Todo Need to send the client a message
+            # TODO Need to send the client a message
             return
 
         for ip, player in party:
