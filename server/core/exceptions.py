@@ -19,3 +19,6 @@ class RoomIsFull(RoomException):
 
 class RoomDoesNotExist(RoomException):
     pass
+
+class PlayerDoesNotExist(RoomException):
+    pass
