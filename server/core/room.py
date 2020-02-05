@@ -30,10 +30,10 @@ class Room:
     def can_party_join(self, length: int):
         return (len(self._players) + length) <= ROOM_PLAYER_LIMIT
 
-    def add_player(self, ip, playerdata):
+    def add_player(self,  playerdata, ip):
         """
-        :param ip: The ip which controls the playerdata's client is running on
-        :param playerdata: the playerdata
+        :param playerdata: the playerdata of the player added
+        :param ip: The ip which the playerdata's client is running on
         :return: None
         :raise: RoomIsFull if the number of connected players in the room is bigger than ROOM_PLAYER_LIMIT
         """
@@ -47,9 +47,10 @@ class Room:
 
     def remove_player(self, playerdata, ip: str = None):
         """
-        :param player:
-        :param ip:
-        :return:
+        :param playerdata: the playerdata of the player removed
+        :param ip: The ip which the playerdata's client is running on
+        :return: None
+        :raise: PlayerDoesNotExist if an unknown player or ip is passed
         """
         players = self._players
         if not ip:
