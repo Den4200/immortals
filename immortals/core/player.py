@@ -6,7 +6,7 @@ from .playerdata import PlayerData
 
 from .settings import GRAVITY, SPEED
 
-
+# TODO add a field - name, also in playerdata.py
 class Player(pygame.sprite.Sprite):
 
     def __init__(
