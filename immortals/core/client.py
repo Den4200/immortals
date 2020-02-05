@@ -33,9 +33,18 @@ class ImmortalsClient:
 
         self.network = Client(ip, port)
         self.network.connect()
-        self.userdata = self.network.recieve()
 
+        self._playerdata = self.network.recieve()
+        self._player: Player = None
         self.active_sprites = dict()
+
+    @property
+    def player(self):
+        return self._player
+
+    @property
+    def playerdata(self):
+        return self._playerdata
 
     def update_active_sprites(self):
         for sprite in self.active_sprites.values():
@@ -69,11 +78,11 @@ class ImmortalsClient:
                 self.active_sprites.pop(addr)
                 self.player_count -= 1
 
-        if self.user.rect.right > self.width:
-            self.user.rect.right = self.width
+        if self._player.rect.right > self.width:
+            self._player.rect.right = self.width
 
-        if self.user.rect.left < 0:
-            self.user.rect.left = 0
+        if self._player.rect.left < 0:
+            self._player.rect.left = 0
 
         self.update_active_sprites()
         map_arena.update()
@@ -81,17 +90,17 @@ class ImmortalsClient:
 
     def run(self) -> None:
         map_ = Haven(self.win)
-        self.user = Player(*self.userdata[1].data, self.height, self.width, map_)
+        self._player = Player(*self._playerdata[1].data, self.height, self.width, map_)
         self.active_sprites.update({
-            self.userdata[0]: self.user
+            self._playerdata[0]: self._player
         })
 
         while self.is_running:
             self.clock.tick(60)
 
-            self.userdata[1].data = self.user.data
+            self._playerdata[1].data = self._player.data
 
-            self.network.send(self.userdata)
+            self.network.send(self._playerdata)
             playerdata = self.network.recieve()
 
             self.refresh(map_, playerdata)
@@ -104,21 +113,21 @@ class ImmortalsClient:
                 if event.type == pygame.KEYDOWN:
 
                     if event.key == pygame.K_a:
-                        self.user.move_left()
+                        self._player.move_left()
 
                     if event.key == pygame.K_d:
-                        self.user.move_right()
+                        self._player.move_right()
 
                     if event.key == pygame.K_SPACE:
-                        self.user.jump()
+                        self._player.jump()
 
                 if event.type == pygame.KEYUP:
 
-                    if event.key == pygame.K_a and self.user.x_delta < 0:
-                        self.user.stop()
+                    if event.key == pygame.K_a and self._player.x_delta < 0:
+                        self._player.stop()
 
-                    if event.key == pygame.K_d and self.user.x_delta > 0:
-                        self.user.stop()
+                    if event.key == pygame.K_d and self._player.x_delta > 0:
+                        self._player.stop()
 
             map_.draw()
             self.draw_active_sprites()
