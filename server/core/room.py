@@ -45,15 +45,20 @@ class Room:
         self._players[ip] = playerdata
         playerdata.color = self.colors.pop()
 
-    def remove_player(self, player, ip: str = None):
+    def remove_player(self, playerdata, ip: str = None):
+        """
+        :param player:
+        :param ip:
+        :return:
+        """
         players = self._players
         if not ip:
             keys = players.keys()
-            ip = keys[list(players.values()).index(player)]  # getting the ip by the player
-        if not all(ip, player) or ip not in self._players:
+            ip = keys[list(players.values()).index(playerdata)]  # getting the ip by the player
+        if not playerdata or ip not in self._players:
             raise PlayerDoesNotExist(f"The Player TODO Isn't in room {self._id}") from None
         self._players.pop(ip)
-        self.colors.append(player.color)
+        self.colors.append(playerdata.color)
 
-        self._players[ip] = player
-        player.color = self.colors.pop()
+        self._players[ip] = playerdata
+        playerdata.color = self.colors.pop()
