@@ -1,7 +1,32 @@
 import arcade
-from pymunk.vec2d import Vec2d
+from pymunk import Vec2d
 
+from .events.events import PlayerEvent
+from .events.states import GameState, PlayerState
 from .events.movement import KeysPressed, apply_movement
+
+
+class Player:
+
+    def __init__(self, x, y, color, filled=True):
+        self.pos = Vec2d(x, y)
+        self.color = color
+        self.filled = filled
+
+    def draw(self):
+        if self.filled:
+            arcade.draw_rectangle_fille(
+                self.pos.x, self.pos.y,
+                50, 50,
+                self.color
+            )d
+        else:
+            arcade.draw_rectangle_outline(
+                self.pos.x, self.pos.y,
+                50, 50,
+                self.color,
+                border_width=4
+            )
 
 
 class Immortals(arcade.Window):
@@ -14,8 +39,11 @@ class Immortals(arcade.Window):
     ) -> None:
         super().__init__(width, height)
 
-        self.player_pos = Vec2d(400, 300)
-        self.keys_pressed = KeysPressed()
+        arcade.set_background_color(arcade.color.WHITE)
+        
+        self.game_state = GameState(player_states=[PlayerState()])
+        self.player = Player(0, 0, arcade.color.GREEN_YELLOW, filled=False)
+        self.player_input = PlayerEvent()
 
     def update(self, dt) -> None:
         self.player_pos = apply_movement(
@@ -26,10 +54,7 @@ class Immortals(arcade.Window):
 
     def on_draw(self) -> None:
         arcade.start_render()
-        arcade.draw_rectangle_filled(
-            center_x=self.player_pos.x, center_y=self.player_pos.y,
-            width=50, height=50, color=arcade.color.YELLOW
-        )
+        self.player.draw()
 
     def on_key_press(self, key, modifiers) -> None:
         self.keys_pressed.keys[key] = True

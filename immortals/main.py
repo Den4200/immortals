@@ -1,7 +1,26 @@
+import asyncio
+import threading
+
 import toml
 import arcade
 
 from core.client import Immortals
+
+
+def thread_worker(window) -> None:
+    loop = asyncio.get_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.create_task(iomain(window, loop))
+    loop.run_forever()
+
+def main(*args, **kwargs):
+    window = Immortals(*args, **kwargs)
+    thread = threading.Thread(
+        target=thread_worker, args=(window,), daemon=True
+    )
+    thread.start()
+    arcade.run()
+
 
 if __name__ == "__main__":
     try:
@@ -17,5 +36,4 @@ if __name__ == "__main__":
         ) from None
 
     else:
-        immortals = Immortals(**config['resolution'])
-        arcade.run()
+        main(**config['resolution'])

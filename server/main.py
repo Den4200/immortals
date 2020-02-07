@@ -1,4 +1,7 @@
+import asyncio
 import toml
+
+from core.server import main
 
 
 if __name__ == "__main__":
@@ -14,5 +17,7 @@ if __name__ == "__main__":
         ) from None
 
     else:
-        # ImmortalsServer(**config).run()
-        pass
+        loop = asyncio.get_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.create_task(main())
+        loop.run_forever()
