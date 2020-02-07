@@ -1,12 +1,11 @@
 import toml
-import pygame
+import arcade
 
-from core.client import ImmortalsClient
-from core.exceptions import MissingConfiguration
+from core.client import Immortals
 
 if __name__ == "__main__":
     try:
-        config = toml.load('config.toml')
+        config = toml.load('immortals/config.toml')
         configs = {**config['resolution'], **config['server']}
 
     except FileNotFoundError:
@@ -18,5 +17,5 @@ if __name__ == "__main__":
         ) from None
 
     else:
-        pygame.init()
-        ImmortalsClient(**configs).run()
+        immortals = Immortals(**config['resolution'])
+        arcade.run()

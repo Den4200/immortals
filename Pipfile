@@ -7,9 +7,10 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-pygame = "*"
+arcade = "*"
+pyzmq = "*"
+pymunk = "*"
 toml = "*"
-connectio = "*"
 
 [requires]
 python_version = "3.7"
