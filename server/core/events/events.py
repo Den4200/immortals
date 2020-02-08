@@ -11,7 +11,7 @@ from .movement import MOVE_MAP
 @dataclass
 class PlayerEvent:
     """
-    Player events sent to a server.
+    Player events sent to and from a server.
     """
     keys: Dict[int, bool] = field(
         default_factory=lambda: {
