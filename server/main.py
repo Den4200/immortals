@@ -2,6 +2,7 @@ import asyncio
 import toml
 
 from core.server import main
+from core.exceptions import MissingConfiguration
 
 
 if __name__ == "__main__":

@@ -15,11 +15,11 @@ class Player:
 
     def draw(self):
         if self.filled:
-            arcade.draw_rectangle_fille(
+            arcade.draw_rectangle_filled(
                 self.pos.x, self.pos.y,
                 50, 50,
                 self.color
-            )d
+            )
         else:
             arcade.draw_rectangle_outline(
                 self.pos.x, self.pos.y,
@@ -37,20 +37,13 @@ class Immortals(arcade.Window):
         height: int, 
         title: str = 'Immortals'
     ) -> None:
-        super().__init__(width, height)
+        super().__init__(width, height, title=title)
 
         arcade.set_background_color(arcade.color.WHITE)
         
         self.game_state = GameState(player_states=[PlayerState()])
         self.player = Player(0, 0, arcade.color.GREEN_YELLOW, filled=False)
         self.player_input = PlayerEvent()
-
-    def update(self, dt) -> None:
-        self.player_pos = apply_movement(
-            speed=800, dt=dt, 
-            current_pos=self.player_pos, 
-            kp=self.keys_pressed
-        )
 
     def on_draw(self) -> None:
         arcade.start_render()

@@ -5,10 +5,12 @@ import toml
 import arcade
 
 from core.client import Immortals
+from core.mainIO import iomain
+from core.exceptions import MissingConfiguration
 
 
 def thread_worker(window) -> None:
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.create_task(iomain(window, loop))
     loop.run_forever()
@@ -24,7 +26,7 @@ def main(*args, **kwargs):
 
 if __name__ == "__main__":
     try:
-        config = toml.load('immortals/config.toml')
+        config = toml.load('config.toml')
         configs = {**config['resolution'], **config['server']}
 
     except FileNotFoundError:

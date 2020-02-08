@@ -4,9 +4,11 @@ import asyncio
 import zmq
 from pymunk import Vec2d
 
+from .constants import UPDATE_TICK
+
 
 async def iomain(window, loop):
-    ctx = Context()
+    ctx = zmq.Context()
 
     sub_sock = ctx.socket(zmq.SUB)
     sub_sock.connect('tcp://localhost:25000')
@@ -18,19 +20,20 @@ async def iomain(window, loop):
     async def send_player_input():
         while True:
             dct = asdict(window.player_input)
-            msg = dict(event=d)
+            msg = dict(event=dct)
             await push_sock.send_json(msg)
+            await asyncio.sleep(1 / UPDATE_TICK)
 
     async def receive_game_state():
         while True:
             gs_string = await sub_sock.recv_string()
             window.game_state.from_json(gs_string)
             player_state = window.game_state.player_states[0]
-            window.plater.position = Vec2d(player_state.x, player_state.y)
+            window.player.position = Vec2d(player_state.x, player_state.y)
 
     try:
         await asyncio.gather(send_player_input(), receive_game_state())
 
     finally:
-        sub_sock.close()
-        push_sock.close()
+        sub_sock.close(1)
+        push_sock.close(1)
