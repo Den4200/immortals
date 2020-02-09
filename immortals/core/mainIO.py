@@ -21,7 +21,7 @@ async def iomain(window, loop):
         while True:
             dct = asdict(window.player_input)
             msg = dict(event=dct)
-            await push_sock.send_json(msg)
+            push_sock.send_json(msg)
             await asyncio.sleep(1 / UPDATE_TICK)
 
     async def receive_game_state():
