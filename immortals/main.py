@@ -1,12 +1,11 @@
 import asyncio
 import threading
 
-import toml
 import arcade
-
+import toml
 from core.client import Immortals
-from core.mainIO import iomain
 from core.exceptions import MissingConfiguration
+from core.mainIO import iomain
 
 
 def thread_worker(window) -> None:
@@ -14,6 +13,7 @@ def thread_worker(window) -> None:
     asyncio.set_event_loop(loop)
     loop.create_task(iomain(window, loop))
     loop.run_forever()
+
 
 def main(*args, **kwargs):
     window = Immortals(*args, **kwargs)

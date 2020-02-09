@@ -1,14 +1,14 @@
-import time
 import asyncio
+import time
 
 import zmq
-from zmq import Socket
 from pymunk import Vec2d
+from zmq import Socket
 
 from .constants import SERVER_TICK
 from .events.events import PlayerEvent
-from .events.states import GameState, PlayerState
 from .events.movement import apply_movement
+from .events.states import GameState, PlayerState
 
 
 async def main():
@@ -61,6 +61,7 @@ async def update_from_client(game_state: GameState, sock: Socket) -> None:
     except asyncio.CancelledError:
         pass
 
+
 def update_game_state(game_state: GameState, event: PlayerEvent) -> None:
     for ps in game_state.player_states:
         pos = Vec2d(ps.x, ps.y)
@@ -70,6 +71,7 @@ def update_game_state(game_state: GameState, event: PlayerEvent) -> None:
         ps.x, ps.y = new_pos.x, new_pos.y
 
         ps.updated = time.time()
+
 
 async def push_game_state(game_state: GameState, sock: Socket) -> None:
     try:

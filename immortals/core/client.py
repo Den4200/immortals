@@ -3,7 +3,6 @@ from pymunk import Vec2d
 
 from .events.events import PlayerEvent
 from .events.states import GameState, PlayerState
-from .events.movement import KeysPressed, apply_movement
 
 
 class Player:
@@ -18,7 +17,7 @@ class Player:
             arcade.draw_rectangle_filled(
                 self.pos.x, self.pos.y,
                 50, 50,
-                self.color
+                self.colorDamn
             )
         else:
             arcade.draw_rectangle_outline(
@@ -34,8 +33,8 @@ class Immortals(arcade.Window):
     def __init__(
         self, 
         width: int, 
-        height: int, 
-        title: str = 'Immortals'
+        height: int,
+            title: str = "Immortal"
     ) -> None:
         super().__init__(width, height, title=title)
 
