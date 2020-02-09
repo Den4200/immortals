@@ -76,7 +76,7 @@ def update_game_state(game_state: GameState, event: PlayerEvent) -> None:
 async def push_game_state(game_state: GameState, sock: Socket) -> None:
     try:
         while True:
-            await sock.send_string(game_state.to_json())
+            sock.send_string(game_state.to_json())
             await asyncio.sleep(1 / SERVER_TICK)
 
     except asyncio.CancelledError:
