@@ -80,7 +80,3 @@ async def push_game_state(game_state: GameState, sock: Socket) -> None:
 
     except asyncio.CancelledError:
         pass
-
-
-async def future_to_json(future: asyncio.Future):
-    yield future
