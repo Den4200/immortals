@@ -1,19 +1,20 @@
 from __future__ import annotations
 
-from typing import List
+import json
 from dataclasses import (
     dataclass,
     asdict
 )
-import json
+from typing import List
 
 
 @dataclass
 class PlayerState:
-    updated: float = 0
-    x: float = 0
-    y: float = 0
-    health: float = 0
+    updated: float = 0.0
+    x: float = 0.0
+    y: float = 0.0
+    health: float = 0.0
+    speed: float = 10.0
     
 
 @dataclass
