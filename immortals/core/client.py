@@ -49,7 +49,9 @@ class Immortals(arcade.Window):
         self.player.draw()
 
     def on_key_press(self, key, modifiers) -> None:
+        print("Press", key)
         self.keys_pressed.keys[key] = True
 
     def on_key_release(self, key, modifiers) -> None:
+        print("release", key)
         self.keys_pressed.keys[key] = False
