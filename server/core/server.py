@@ -49,7 +49,7 @@ async def main():
 async def update_from_client(game_state: GameState, sock: Socket) -> None:
     try:
         while True:
-            msg = await sock.recv_json()
+            msg = dict(await sock.recv_json())
             event_dict = msg['event']
             print(f'Received {event_dict}')
 
