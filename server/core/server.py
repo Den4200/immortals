@@ -13,11 +13,9 @@ from .events.states import GameState, PlayerState
 
 async def main():
     future = asyncio.Future()
-
     game_state = GameState(
         player_states=[PlayerState()]
     )
-
     ctx = zmq.Context()
 
     sock_b = ctx.socket(zmq.PULL)
@@ -50,7 +48,7 @@ async def main():
 async def update_from_client(game_state: GameState, sock: Socket) -> None:
     try:
         while True:
-            msg = await sock.recv_json()
+            msg = sock.recv_json()
 
             event_dict = msg['event']
             print(f'Received {event_dict}')
@@ -59,6 +57,7 @@ async def update_from_client(game_state: GameState, sock: Socket) -> None:
             update_game_state(game_state, event)
 
     except asyncio.CancelledError:
+        print("Cancelled")
         pass
 
 
