@@ -22,6 +22,7 @@ async def iomain(window, loop):
             dct = asdict(window.player_input)
             msg = dict(event=dct)
             push_sock.send_json(msg)
+            print("Sent!")
             await asyncio.sleep(1 / UPDATE_TICK)
 
     async def receive_game_state():
@@ -29,8 +30,9 @@ async def iomain(window, loop):
             gs_string = sub_sock.recv_string()
             window.game_state.from_json(gs_string)
             player_state = window.game_state.player_states[0]
+            # t = time.time()
             window.player.position = Vec2d(player_state.x, player_state.y)
-
+            print("Recieve")
     try:
         await asyncio.gather(send_player_input(), receive_game_state())
 
