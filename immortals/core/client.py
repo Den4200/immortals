@@ -11,18 +11,19 @@ class Player:
         self.pos = Vec2d(x, y)
         self.color = color
         self.filled = filled
+        self.size = 50
 
     def draw(self):
         if self.filled:
             arcade.draw_rectangle_filled(
                 self.pos.x, self.pos.y,
-                50, 50,
+                self.size, self.size,
                 self.colorDamn
             )
         else:
             arcade.draw_rectangle_outline(
                 self.pos.x, self.pos.y,
-                50, 50,
+                self.size, self.size,
                 self.color,
                 border_width=4
             )
@@ -43,15 +44,17 @@ class Immortals(arcade.Window):
         self.game_state = GameState(player_states=[PlayerState()])
         self.player = Player(0, 0, arcade.color.GREEN_YELLOW, filled=False)
         self.player_input = PlayerEvent()
+        self.keys_pressed = dict()
 
     def on_draw(self) -> None:
         arcade.start_render()
         self.player.draw()
+        print(self.player.pos)
 
     def on_key_press(self, key, modifiers) -> None:
-        print("Press", key)
-        self.keys_pressed.keys[key] = True
+        self.keys_pressed[key] = True
+        self.player_input.keys = self.keys_pressed
 
     def on_key_release(self, key, modifiers) -> None:
-        print("release", key)
-        self.keys_pressed.keys[key] = False
+        self.keys_pressed[key] = False
+        self.player_input.keys = self.keys_pressed
