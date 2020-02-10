@@ -32,6 +32,7 @@ async def iomain(window, loop):
             player_state = window.game_state.player_states[0]
             # t = time.time()
             window.player.position = Vec2d(player_state.x, player_state.y)
+
     try:
         await asyncio.gather(send_player_input(), receive_game_state())
 
