@@ -51,8 +51,7 @@ async def update_from_client(game_state: GameState, sock: Socket) -> None:
         while True:
             msg = dict(await sock.recv_json())
             event_dict = msg['event']
-            print(f'Received {event_dict}')
-
+            # print(event_dict)
             event = PlayerEvent(**event_dict)
             update_game_state(game_state, event)
 
@@ -65,8 +64,8 @@ def update_game_state(game_state: GameState, event: PlayerEvent) -> None:
     for ps in game_state.player_states:
         pos = Vec2d(ps.x, ps.y)
         dt = time.time() - ps.updated
-
         new_pos = apply_movement(ps.speed, dt, pos, event)
+        print(pos, new_pos)
         ps.x, ps.y = new_pos.x, new_pos.y
 
         ps.updated = time.time()
