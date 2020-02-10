@@ -27,7 +27,7 @@ async def iomain(window, loop):
 
     async def receive_game_state():
         while True:
-            gs_string = sub_sock.recv_string()
+            gs_string = await sub_sock.recv_string()
             window.game_state.from_json(gs_string)
             player_state = window.game_state.player_states[0]
             # t = time.time()

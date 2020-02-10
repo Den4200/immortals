@@ -49,7 +49,7 @@ async def main():
 async def update_from_client(game_state: GameState, sock: Socket) -> None:
     try:
         while True:
-            msg = {k: v async for k, v in future_to_json(sock.recv_json())}
+            msg = await sock.recv_json()
             event_dict = msg['event']
             print(f'Received {event_dict}')
 
@@ -80,7 +80,3 @@ async def push_game_state(game_state: GameState, sock: Socket) -> None:
 
     except asyncio.CancelledError:
         pass
-
-
-async def future_to_json(future: asyncio.Future):
-    yield future
