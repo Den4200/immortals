@@ -2,13 +2,14 @@ import asyncio
 from dataclasses import asdict
 
 import zmq
+import zmq.asyncio
 from pymunk import Vec2d
 
 from .constants import UPDATE_TICK
 
 
 async def iomain(window, loop):
-    ctx = zmq.Context()
+    ctx = zmq.asyncio.Context()
 
     sub_sock = ctx.socket(zmq.SUB)
     sub_sock.connect('tcp://localhost:25000')
@@ -22,7 +23,6 @@ async def iomain(window, loop):
             dct = asdict(window.player_input)
             msg = dict(event=dct)
             push_sock.send_json(msg)
-            print("Sent!")
             await asyncio.sleep(1 / UPDATE_TICK)
 
     async def receive_game_state():

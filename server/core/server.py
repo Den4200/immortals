@@ -2,6 +2,7 @@ import asyncio
 import time
 
 import zmq
+import zmq.asyncio
 from pymunk import Vec2d
 from zmq import Socket
 
@@ -16,7 +17,7 @@ async def main():
     game_state = GameState(
         player_states=[PlayerState()]
     )
-    ctx = zmq.Context()
+    ctx = zmq.asyncio.Context()
 
     sock_b = ctx.socket(zmq.PULL)
     sock_b.bind('tcp://*:25001')
@@ -48,8 +49,7 @@ async def main():
 async def update_from_client(game_state: GameState, sock: Socket) -> None:
     try:
         while True:
-            msg = sock.recv_json()
-
+            msg = {k: v async for k, v in future_to_json(sock.recv_json())}
             event_dict = msg['event']
             print(f'Received {event_dict}')
 
@@ -80,3 +80,7 @@ async def push_game_state(game_state: GameState, sock: Socket) -> None:
 
     except asyncio.CancelledError:
         pass
+
+
+async def future_to_json(future: asyncio.Future):
+    yield future
