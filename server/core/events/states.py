@@ -30,7 +30,7 @@ class GameState:
         return json.dumps(dct)
 
     def from_json(self, data):
-        dct = json.loads(data)
+        dct = json.load(data)
 
         for idx, player in enumerate(dct['player_states']):
             self.player_states[idx] = PlayerState(**player)
