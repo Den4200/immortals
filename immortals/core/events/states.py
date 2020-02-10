@@ -14,7 +14,7 @@ class PlayerState:
     x: float = 0
     y: float = 0
     health: float = 0
-    speed: float = 5.0
+    speed: float = 250.0
     
 
 @dataclass

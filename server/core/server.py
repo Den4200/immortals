@@ -65,7 +65,6 @@ def update_game_state(game_state: GameState, event: PlayerEvent) -> None:
         pos = Vec2d(ps.x, ps.y)
         dt = time.time() - ps.updated
         new_pos = apply_movement(ps.speed, dt, pos, event)
-        print(pos, new_pos)
         ps.x, ps.y = new_pos.x, new_pos.y
 
         ps.updated = time.time()
