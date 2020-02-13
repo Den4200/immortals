@@ -61,13 +61,16 @@ async def update_from_client(game_state: GameState, sock: Socket) -> None:
 
 
 def update_game_state(game_state: GameState, event: PlayerEvent) -> None:
-    for ps in game_state.player_states:
-        pos = Vec2d(ps.x, ps.y)
-        dt = time.time() - ps.updated
-        new_pos = apply_movement(ps.speed, dt, pos, event)
-        ps.x, ps.y = new_pos.x, new_pos.y
+    for raddr in game_state.player_states:
+        states = game_state.player_states[raddr]
 
-        ps.updated = time.time()
+        for ps in states:
+            pos = Vec2d(ps.x, ps.y)
+            dt = time.time() - ps.updated
+            new_pos = apply_movement(ps.speed, dt, pos, event)
+            ps.x, ps.y = new_pos.x, new_pos.y
+
+            ps.updated = time.time()
 
 
 async def push_game_state(game_state: GameState, sock: Socket) -> None:

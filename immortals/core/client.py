@@ -18,7 +18,7 @@ class Player:
             arcade.draw_rectangle_filled(
                 self.pos.x, self.pos.y,
                 self.size, self.size,
-                self.colorDamn
+                self.color
             )
         else:
             arcade.draw_rectangle_outline(
