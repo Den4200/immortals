@@ -24,7 +24,7 @@ async def iomain(window, loop):
             msg = dict(event=dct)
             push_sock.send_json(msg)
             await asyncio.sleep(1 / UPDATE_TICK)
-
+    # TODO update player_states
     async def receive_game_state():
         while True:
             gs_string = await sub_sock.recv_string()

@@ -59,7 +59,7 @@ async def update_from_client(game_state: GameState, sock: Socket) -> None:
         print("Cancelled")
         pass
 
-
+# TODO update player_states
 def update_game_state(game_state: GameState, event: PlayerEvent) -> None:
     for ps in game_state.player_states:
         pos = Vec2d(ps.x, ps.y)

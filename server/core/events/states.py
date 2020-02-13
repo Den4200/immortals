@@ -21,6 +21,7 @@ class PlayerState:
 class GameState:
     player_states: List[PlayerState]
 
+    # TODO update player_states
     def to_json(self):
         dct = dict(
             player_states=[
@@ -29,6 +30,7 @@ class GameState:
         )
         return json.dumps(dct)
 
+    # TODO update player_states
     def from_json(self, data):
         dct = json.loads(data)
 
