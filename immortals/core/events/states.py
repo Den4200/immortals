@@ -5,7 +5,7 @@ from dataclasses import (
     dataclass,
     asdict
 )
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 
 @dataclass
@@ -38,7 +38,7 @@ class PlayerState:
 
 @dataclass
 class GameState:
-    player_states: Dict[Tuple[str, int], List[PlayerState]]
+    player_states: Optional[Dict[Tuple[str, int], PlayerState]] = None
 
     def to_json(self) -> str:
         dct = {

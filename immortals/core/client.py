@@ -35,7 +35,7 @@ class Immortals(arcade.Window):
         self, 
         width: int, 
         height: int,
-            title: str = "Immortal"
+            title: str = "Immortals"
     ) -> None:
         super().__init__(width, height, title=title)
 

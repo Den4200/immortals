@@ -14,9 +14,7 @@ from .events.states import GameState, PlayerState
 
 async def main():
     future = asyncio.Future()
-    game_state = GameState(
-        player_states=[PlayerState()]
-    )
+    game_state = GameState()
     ctx = zmq.asyncio.Context()
 
     sock_b = ctx.socket(zmq.PULL)
