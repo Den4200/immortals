@@ -6,7 +6,7 @@ from core.server import main
 
 if __name__ == "__main__":
     try:
-        config = toml.load('server/config.toml')['server']
+        config = toml.load('config.toml')['server']
     
     except FileNotFoundError:
         raise MissingConfiguration('config.toml is missing') from None
