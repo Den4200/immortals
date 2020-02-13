@@ -43,9 +43,9 @@ class GameState:
     def to_json(self) -> str:
         dct = {
             'player_states': {
-                (raddr, [
+                raddr: [
                     asdict(p) for p in states
-                ]) for raddr, states in self.player_states.items()
+                ] for raddr, states in self.player_states.items()
             }
         }
         return json.dumps(dct)
